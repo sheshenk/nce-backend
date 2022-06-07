@@ -1,6 +1,13 @@
-import { ApolloServer, AuthenticationError } from "apollo-server";
+import { ApolloServer, AuthenticationError } from "apollo-server-express";
 import apolloApplication from "./apolloApplication.js";
 import jwt from "jsonwebtoken"
+import { createServer } from 'http';
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import express from "express";
+import { PubSub } from "graphql-subscriptions";
 
 const schema = apolloApplication.createSchemaForApollo()
 
@@ -16,22 +23,43 @@ const getUser = token => {
 	}
 }
 
-const apolloServer = new ApolloServer({
-	schema,
-	csrfPrevention: true,
-	context: ({ req }) => {
-		console.log(req.body.operationName)
-		if (whitelisted.includes(req.body.operationName)) return {}
-		const token = req.headers.authorization || 'Bearer null'
-		if (!token.includes('Bearer ')) throw new AuthenticationError("Token must use Bearer format.")
-		const user = getUser(token.split(' ')[1])
-		if (!user) throw new AuthenticationError("You must be logged in.")
-		return user
-	}
-})
+export const pubsub = new PubSub()
 
-const listenToApollo = () => apolloServer.listen().then(({url}) => {
-	console.log(`Apollo Server is running at ${url}`)
-}).catch(e => console.log(e))
+const startApolloServer = async () => {
+	const app = express()
+	const httpServer = createServer(app)
+	const wsServer = new WebSocketServer({
+		server: httpServer,
+		path: '/graphql'
+	})
+	const serverCleanup = useServer({ schema}, wsServer)
+	const apolloServer = new ApolloServer({
+		schema,
+		csrfPrevention: true,
+		context: ({ req }) => {
+			console.log(req.body.operationName)
+			if (whitelisted.includes(req.body.operationName)) return {}
+			const token = req.headers.authorization || 'Bearer null'
+			if (!token.includes('Bearer ')) throw new AuthenticationError("Token must use Bearer format.")
+			const user = getUser(token.split(' ')[1])
+			if (!user) throw new AuthenticationError("You must be logged in.")
+			return user
+		},
+		plugins: [ApolloServerPluginDrainHttpServer({httpServer}), {
+			async ServerWillStart() {
+				return {
+					async drainServer() {
+						await serverCleanup.dispose()
+					}
+				}
+			}
+		}]
+	})
 
-export default listenToApollo
+	await apolloServer.start()
+	apolloServer.applyMiddleware({ app })
+	await new Promise((resolve) => httpServer.listen( {port: 4000}, resolve) )
+	console.log(`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`)
+}
+
+export default startApolloServer
