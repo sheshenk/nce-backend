@@ -1,11 +1,11 @@
 import { pubsub } from "../src/apolloServer.js";
 import { pool } from "../src/postgreServer.js";
 
-export const updateMarketHistory = async ({symbol, price, volume}) => {
+export const updateMarketHistory = async ({symbol, price, quantity}) => {
 	try {
 		const res = await pool.query(
 			`INSERT INTO market_history (symbol, open, close, high, low, volume) VALUES ($1, $2, $2, $2, $2, $3) ON CONFLICT (time, symbol) DO UPDATE SET high = GREATEST(market_history.high, $2), low = LEAST(market_history.low, $2), close = $2, volume = market_history.volume + $3 RETURNING *`,
-			[symbol, price, volume]
+			[symbol, price, quantity]
 		)
 		pubsub.publish('MH_UPDATED', { marketHistoryUpdated: res.rows[0] })
 		return { status: 201, response: "Market history data added." }
