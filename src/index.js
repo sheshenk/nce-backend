@@ -1,3 +1,3 @@
-import listenToApollo from './apolloServer.js'
+import startApolloServer from './apolloServer.js'
 
-listenToApollo()
+startApolloServer()
