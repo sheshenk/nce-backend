@@ -7,8 +7,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import express from "express";
-import { AmqpPubSub } from 'graphql-rabbitmq-subscriptions';
-import { ConsoleLogger } from "@cdm-logger/server";
+import { PubSub } from "graphql-subscriptions";
 
 const schema = apolloApplication.createSchemaForApollo()
 
@@ -24,17 +23,7 @@ const getUser = token => {
 	}
 }
 
-const settings = {
-	level: "info", // Optional: default 'info' ('trace'|'info'|'debug'|'warn'|'error'|'fatal')
-	mode: "short" // Optional: default 'short' ('short'|'long'|'dev'|'raw')
-}
-
-const logger = ConsoleLogger.create("nce", settings);
-
-
-export const pubsub = new AmqpPubSub({
-	logger,
-});
+export const pubsub = new PubSub()
 
 const startApolloServer = async () => {
 	const app = express()
@@ -43,7 +32,7 @@ const startApolloServer = async () => {
 		server: httpServer,
 		path: '/graphql'
 	})
-	const serverCleanup = useServer({ schema }, wsServer)
+	const serverCleanup = useServer({ schema}, wsServer)
 	const apolloServer = new ApolloServer({
 		schema,
 		csrfPrevention: true,
@@ -56,7 +45,7 @@ const startApolloServer = async () => {
 			if (!user) throw new AuthenticationError("You must be logged in.")
 			return user
 		},
-		plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), {
+		plugins: [ApolloServerPluginDrainHttpServer({httpServer}), {
 			async ServerWillStart() {
 				return {
 					async drainServer() {
@@ -69,7 +58,7 @@ const startApolloServer = async () => {
 
 	await apolloServer.start()
 	apolloServer.applyMiddleware({ app })
-	await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve))
+	await new Promise((resolve) => httpServer.listen( {port: 4000}, resolve) )
 	console.log(`🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`)
 }
 
