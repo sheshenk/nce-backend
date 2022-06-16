@@ -18,14 +18,19 @@ export const createUser = async ({name, email, password, phone}) => {
 }
 
 export const readUser = async (single, {userid, email}) => {
-	var queryString = 'SELECT * FROM users ORDER BY userid ASC'
+	// console.log(userid)
+	// console.log(email)
+	var queryString = 'SELECT * FROM users ORDER BY userid DESC'
 	if (userid) queryString = `SELECT * FROM users WHERE userid='${userid}'`
 	if (email) queryString = `SELECT * FROM users WHERE email='${email}'`
 	const res = await pool.query(queryString)
+	// console.log(res.rows[0])
 	return res.rows.length ? single ? res.rows[0] : res.rows : null
 }
 
 export const updateUser = async (userid, params) => {
+	console.log(userid)
+	console.log(params)
 	var queryString = `UPDATE users SET `
 	for (const key in params) {
 		queryString += `${key} = '${params[key]}', `
@@ -36,4 +41,22 @@ export const updateUser = async (userid, params) => {
 		const res = await pool.query(queryString)
 		return res.rows.length ? { status: 200, response: res.rows[0].userid } : { status: 409, error: "Record doesn't exist" }
 	} catch (err) { return { status: 409, error: err.detail } }
+}
+
+export const addBalance = async (params) => {
+	try {
+		const res = await pool.query(
+			`UPDATE USERS SET BALANCE = BALANCE + ${params['amount']} WHERE userid=${params['userid']} RETURNING *`
+		)
+		return { status: 200, response: "ADDED BALANCE"}
+	} 
+	catch (err) { 
+		return { status: 409, error: "FAILED BALANCE ADD"} 
+	}
+}
+
+export const getUserBalance = async ({userid}) => {
+	var queryString = `SELECT * FROM USERS WHERE userid=${userid}`
+	const res = await pool.query(queryString)
+	return res.rows.length ? res.rows[0].balance : 0
 }

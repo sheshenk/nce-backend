@@ -6,3 +6,10 @@ export const readOpenAskOrders = async ({symbol}) => {
 	const res = await pool.query(queryString)
 	return res.rows.length ? res.rows : null
 }
+
+export const getOpenAskOrdersForSymbolAndUser = async ({symbol, owner}) => {
+	var queryString = `SELECT * FROM OPEN_ASK_ORDERS_${symbol}`
+    if (owner) queryString = `SELECT * FROM OPEN_ASK_ORDERS_${symbol} WHERE owner=${owner}`
+	const res = await pool.query(queryString)
+	return res.rows.length ? res.rows : null
+}
