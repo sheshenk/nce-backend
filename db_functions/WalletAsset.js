@@ -18,3 +18,9 @@ export const readWalletAsset = async (single, {walletid, symbol}) => {
 	const res = await pool.query(queryString)
 	return res.rows.length ? single ? res.rows[0] : res.rows : null
 }
+
+export const getWalletAssetsWalletID = async ({walletid}) => {
+	var queryString = `SELECT * FROM WALLET_ASSETS WHERE walletid=${walletid}`
+	const res = await pool.query(queryString)
+	return res.rows.length ? res.rows : null
+}

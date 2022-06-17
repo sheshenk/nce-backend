@@ -1,7 +1,7 @@
 import { gql } from "apollo-server";
 import { createModule } from "graphql-modules";
 import jwt from "jsonwebtoken"
-import { createUser, readUser, updateUser } from "../db_functions/User.js";
+import { createUser, readUser, updateUser, addBalance, getUserBalance } from "../db_functions/User.js";
 
 const UserModule = createModule({
 	id: 'user',
@@ -19,12 +19,14 @@ const UserModule = createModule({
 			getAllUsers: [User!]
 			getUserById(userid: ID!): User
 			getUserByEmail(email: String!): User
+			getUserBalance(userid: ID!): Float
 		},
 		type Mutation {
 			login(email: String!, password: String!): HTTPResponse
 			createUser(name: String!, email: String!, password: String!, phone: String): HTTPResponse
 			updateUserDetails(name: String!, email: String!, phone: String): HTTPResponse
-			updateUserPassword(password: String!): HTTPResponse
+			updateUserPassword(password: String!): HTTPResponse,
+			addBalance(userid: ID!, amount: Float!): HTTPResponse
 		}
 	`,
 	resolvers: {
@@ -32,7 +34,8 @@ const UserModule = createModule({
 			currentUser: (p, a, c) => readUser(true, c),
 			getAllUsers: (p, a, c) => readUser(false, {}),
 			getUserById: (p, a, c) => readUser(true, a),
-			getUserByEmail: (p, a, c) => readUser(true, a)
+			getUserByEmail: (p, a, c) => readUser(true, a),
+			getUserBalance: (p, a, c) => getUserBalance(a)
 		},
 		Mutation: {
 			login: async (p, a, c) => {
@@ -46,7 +49,8 @@ const UserModule = createModule({
 			},
 			createUser: (p, a, c) => createUser(a),
 			updateUserDetails: (p, a, c) => updateUser(c.userid, a),
-			updateUserPassword: (p, a, c) => updateUser(c.userid, a)
+			updateUserPassword: (p, a, c) => updateUser(c.userid, a),
+			addBalance: (p, a, c) => addBalance(a)
 		}
 	}
 })

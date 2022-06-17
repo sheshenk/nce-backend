@@ -2,7 +2,7 @@ import { gql } from "apollo-server";
 import { createModule } from "graphql-modules";
 import { withFilter } from "graphql-subscriptions";
 import { pubsub } from "../src/apolloServer.js";
-// import { readClosedOrders } from "../db_functions/ClosedOrder.js";
+import { getClosedOrdersForSymbolAndUser } from "../db_functions/ClosedOrder.js";
 
 const ClosedOrderModule = createModule({
 	id: 'closed-order',
@@ -10,28 +10,27 @@ const ClosedOrderModule = createModule({
 		type ClosedOrder {
 			orderid: ID!
             walletid: ID!
-            owner: String!
-            buySide: String!
+            owner: ID!
+            buyside: String!
             quantity: Float!
             symbol: String!
             price: Float!
-            fillCost: Float!
-            fillPrice: Float!
-            createdAt: String!
-            filledAt: String!
+            fillcost: Float!
+            fillprice: Float!
+            createdat: String!
+            filledat: String!
 		}
 
 		type Query {
-			getClosedOrdersForSymbol(symbol: String!): [ClosedOrder!]
+			getClosedOrdersForSymbolAndUser(symbol: String!, owner: ID): [ClosedOrder!]
 		}
 
 	`,
 	resolvers: {
 		Query: {
-			getClosedOrdersForSymbol: (p, a, c) => readClosedOrders(a)
+			getClosedOrdersForSymbolAndUser: (p, a, c) => getClosedOrdersForSymbolAndUser(a)
 		}
 	}
 })
 
 export default ClosedOrderModule
-
