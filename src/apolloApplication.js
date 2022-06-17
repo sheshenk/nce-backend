@@ -7,6 +7,7 @@ import WalletModule from "../types/Wallet.js";
 import WalletAssetModule from "../types/WalletAsset.js";
 import OpenAskOrderModule from "../types/OpenAskOrder.js";
 import OpenBidOrderModule from "../types/OpenBidOrder.js";
+import OrderModule from "../types/Order.js";
 
 const apolloApplication = createApplication({
 	modules: [
@@ -17,7 +18,8 @@ const apolloApplication = createApplication({
 		MarketHistoryModule,
 		OrderFillingModule,
 		OpenAskOrderModule,
-		OpenBidOrderModule
+		OpenBidOrderModule,
+		OrderModule
 	]
 })
 
