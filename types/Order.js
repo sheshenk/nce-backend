@@ -12,20 +12,20 @@ const OrderModule = createModule({
             side:String!
             quantity:Float!
             price:Float!
-            ownerID:Int!
-            walletID:Int!
+            ownerId:Int!
+            walletId:Int!
         }
 
 		type Mutation {
-			createOrder(symbol:String!, type:String!, side:String!, quantity:Float!, price:Float!, ownerID:Int!, walletID:Int!): HTTPResponse
+			createOrder(symbol: String!, type: String!, side: String!, quantity: Float!, price: Float!, ownerId: Int!, walletId: Int!): HTTPResponse
 		}
 
 	`,
     resolvers: {
         Mutation: {
-            createOrder: (p, a, c) => {
+            createOrder: async (p, a, c) => {
                 console.log(a);
-                addOrder(a);
+                return await addOrder(a);
             }
         }
     }
