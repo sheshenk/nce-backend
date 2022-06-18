@@ -4,7 +4,6 @@ const queue = "exchange"
 // Add, Symbol, Type, Side, Quantity, Price, Owner ID, Wallet ID
 export const addOrder = async ({ symbol, type, side, quantity, price, ownerId, walletId }) => {
     try {
-        console.log("L7", symbol, type, side, quantity, price, ownerId, walletId)
         return await sendMessage(`add ${symbol} ${type} ${side} ${quantity} ${price} ${ownerId} ${walletId}`);
     } catch (err) { return { status: 409, error: err.detail } }
 }

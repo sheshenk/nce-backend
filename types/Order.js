@@ -24,7 +24,6 @@ const OrderModule = createModule({
     resolvers: {
         Mutation: {
             createOrder: async (p, a, c) => {
-                console.log(a);
                 return await addOrder(a);
             }
         }
