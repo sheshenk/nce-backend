@@ -49,6 +49,7 @@ const startApolloServer = async () => {
 		csrfPrevention: true,
 		context: ({ req }) => {
 			console.log(req.body.operationName)
+			console.log("REQ : ",req.body)
 			if (whitelisted.includes(req.body.operationName)) return {}
 			const token = req.headers.authorization || 'Bearer null'
 			if (!token.includes('Bearer ')) throw new AuthenticationError("Token must use Bearer format.")
