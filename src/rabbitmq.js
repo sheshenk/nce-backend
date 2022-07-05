@@ -7,6 +7,12 @@ export const addOrder = async ({ symbol, type, side, quantity, price, ownerId, w
         return await sendMessage(`add ${symbol} ${type} ${side} ${quantity} ${price} ${ownerId} ${walletId}`);
     } catch (err) { return { status: 409, error: err.detail } }
 }
+// Cancel, Symbol, Side, Order ID, Price
+export const cancelOrder = async ({ symbol, side, orderId, price }) => {
+    try {
+        return await sendMessage(`cancel ${symbol} ${side} ${orderId} ${price}`);
+    } catch (err) { return { status: 409, error: err.detail } }
+}
 
 async function sendMessage(msg) {
     await amqp.connect('amqp://localhost').then(function (conn) {
