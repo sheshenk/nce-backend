@@ -1,6 +1,6 @@
 import { gql } from "apollo-server";
 import { createModule } from "graphql-modules";
-import { addOrder, cancelOrder } from "../src/rabbitmq.js";
+import { addOrder, cancelOrder, modifyOrder } from "../src/rabbitmq.js";
 
 
 const OrderModule = createModule({
@@ -18,7 +18,8 @@ const OrderModule = createModule({
 
 		type Mutation {
 			createOrder(symbol: String!, type: String!, side: String!, quantity: Float!, price: Float!, ownerId: Int!, walletId: Int!): HTTPResponse
-            cancelOrder(symbol: String!, side: String!, price: Float!, orderId: String!): HTTPResponse
+            cancelOrder(symbol: String!, side: String!, price: Float!, orderId: String!): HTTPResponse,
+            modifyOrder(symbol: String!, side: String!, orderId: String!, prevQuantity: Float!, prevPrice: Float!, newQuantity: Float!, newPrice: Float!): HTTPResponse
 		}
 
 	`,
@@ -29,6 +30,9 @@ const OrderModule = createModule({
             },
             cancelOrder: async (p, a, c) => {
                 return await cancelOrder(a);
+            },
+            modifyOrder: async (p, a, c) => {
+                return await modifyOrder(a);
             }
         }
     }

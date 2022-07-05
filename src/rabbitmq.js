@@ -13,6 +13,12 @@ export const cancelOrder = async ({ symbol, side, orderId, price }) => {
         return await sendMessage(`cancel ${symbol} ${side} ${orderId} ${price}`);
     } catch (err) { return { status: 409, error: err.detail } }
 }
+// Modify, Symbol, Side, Order ID, prev Quantity, prev Price, new Quantity, new Price
+export const modifyOrder = async ({ symbol, side, orderId, prevQuantity, prevPrice, newQuantity, newPrice }) => {
+    try {
+        return await sendMessage(`modify ${symbol} ${side} ${orderId} ${prevQuantity} ${prevPrice} ${newQuantity} ${newPrice}`);
+    } catch (err) { return { status: 409, error: err.detail } }
+}
 
 async function sendMessage(msg) {
     await amqp.connect('amqp://localhost').then(function (conn) {
