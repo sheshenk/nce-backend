@@ -20,7 +20,7 @@ const OpenBidOrderModule = createModule({
 		}
 
 		type Query {
-			getOpenBidOrdersForSymbol(symbol: String!): [OpenBidOrder!]
+			getOpenBidOrdersForSymbol(symbol: String!, number: Int): [OpenBidOrder!]
 			getOpenBidOrdersForSymbolAndUser(symbol: String!, owner: ID): [OpenBidOrder!]
 		}
 
