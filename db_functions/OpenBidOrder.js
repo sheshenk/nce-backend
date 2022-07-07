@@ -1,8 +1,10 @@
 import { pubsub } from "../src/apolloServer.js";
 import { pool } from "../src/postgreServer.js";
 
-export const readOpenBidOrders = async ({symbol}) => {
+export const readOpenBidOrders = async ({symbol, number}) => {
 	var queryString = `SELECT * FROM open_bid_orders_${symbol} ORDER BY price DESC LIMIT 5`
+	if (number) queryString = `SELECT * FROM open_bid_orders_${symbol} ORDER BY price DESC LIMIT ${number}`
+	if (number == 0) queryString = `SELECT * FROM open_bid_orders_${symbol} ORDER BY price DESC`
 	const res = await pool.query(queryString)
 	return res.rows.length ? res.rows : null
 }
