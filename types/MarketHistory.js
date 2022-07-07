@@ -1,6 +1,6 @@
 import { gql } from "apollo-server";
 import { createModule } from "graphql-modules";
-import { readMarketHistory, updateMarketHistory } from "../db_functions/MarketHistory.js";
+import { readMarketHistory, updateMarketHistory, readMarketHistoryAPI } from "../db_functions/MarketHistory.js";
 
 const MarketHistoryModule = createModule({
 	id: 'market-history',
@@ -17,6 +17,7 @@ const MarketHistoryModule = createModule({
 
 		type Query {
 			getMarketHistoryForSymbol(symbol: String!): [MarketHistory!]
+			readMarketHistoryAPI(symbol: String!, number: Int): [MarketHistory!]
 		}
 
 		type Mutation {
@@ -26,7 +27,8 @@ const MarketHistoryModule = createModule({
 	`,
 	resolvers: {
 		Query: {
-			getMarketHistoryForSymbol: (p, a, c) => readMarketHistory(false, a)
+			getMarketHistoryForSymbol: (p, a, c) => readMarketHistory(false, a),
+			readMarketHistoryAPI: (p, a, c) => readMarketHistoryAPI(a)
 		},
 		Mutation: {
 			updateMarketHistory: (p, a, c) => updateMarketHistory(a)
