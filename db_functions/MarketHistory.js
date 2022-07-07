@@ -18,3 +18,11 @@ export const readMarketHistory = async (single, {symbol}) => {
 	const res = await pool.query(queryString)
 	return res.rows.length ? single ? res.rows[0] : res.rows : null
 }
+
+export const readMarketHistoryAPI = async ({symbol, number}) => {
+	var queryString = `SELECT time, open, close, high, low, volume FROM market_history_${symbol} ORDER BY time DESC LIMIT 5`
+	if (number) queryString = `SELECT time, open, close, high, low, volume FROM market_history_${symbol} ORDER BY time DESC LIMIT ${number}`
+	if (number == 0) queryString = `SELECT time, open, close, high, low, volume FROM market_history_${symbol} ORDER BY time DESC LIMIT 10`
+	const res = await pool.query(queryString)
+	return res.rows.length ? res.rows : null
+}
