@@ -20,7 +20,7 @@ const OpenAskOrderModule = createModule({
 		}
 
 		type Query {
-			getOpenAskOrdersForSymbol(symbol: String!): [OpenAskOrder!]
+			getOpenAskOrdersForSymbol(symbol: String!, number: Int): [OpenAskOrder!]
 			getOpenAskOrdersForSymbolAndUser(symbol: String!, owner: ID): [OpenAskOrder!]
 		}
 
