@@ -7,16 +7,8 @@ const OpenAskOrderModule = createModule({
 	id: 'open-ask-order',
 	typeDefs: gql`
 		type OpenAskOrder {
-			orderid: ID!
-            walletid: ID!
-            owner: String!
-            quantity: Float!
-            symbol: String!
             price: Float!
             openquantity: Float!
-            fillcost: Float!
-            createdat: String!
-            updatedat: String!
 		}
 
 		type Query {

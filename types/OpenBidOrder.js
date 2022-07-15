@@ -7,16 +7,8 @@ const OpenBidOrderModule = createModule({
 	id: 'open-bid-order',
 	typeDefs: gql`
 		type OpenBidOrder {
-			orderid: ID!
-            walletid: ID!
-            owner: String!
-            quantity: Float!
-            symbol: String!
             price: Float!
             openquantity: Float!
-            fillcost: Float!
-            createdat: String!
-            updatedat: String!
 		}
 
 		type Query {
