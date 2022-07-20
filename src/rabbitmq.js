@@ -20,6 +20,7 @@ export const modifyOrder = async ({ symbol, side, orderId, prevQuantity, prevPri
 }
 
 async function sendMessage(queue, msg) {
+    queue = queue.toUpperCase();
     await amqp.connect('amqp://localhost').then(function (conn) {
         return conn.createChannel().then(async function (ch) {
 
