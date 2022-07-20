@@ -17,7 +17,7 @@ const OpenBidOrderModule = createModule({
 		}
 
 		type Subscription {
-			newBidOpenOrder(symbol:String!): [OpenBidOrder!]
+			getOpenBidOrdersForSymbol(symbol:String!): [OpenBidOrder!]
 		}
 
 	`,
@@ -27,8 +27,8 @@ const OpenBidOrderModule = createModule({
 			getOpenBidOrdersForSymbolAndUser: (p, a, c) => getOpenBidOrdersForSymbolAndUser(a)
 		},
 		Subscription: {
-			newBidOpenOrder: {
-				subscribe: () => pubsub.asyncIterator(["UPDATE_BID_ORDER"])
+			getOpenBidOrdersForSymbol: {
+				subscribe: (p, a, c) => pubsub.asyncIterator(["UPDATE_BID_ORDER_" + a.symbol.toUpperCase()])
 			}
 		}
 	}

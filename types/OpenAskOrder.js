@@ -17,7 +17,7 @@ const OpenAskOrderModule = createModule({
 		}
 
 		type Subscription {
-			newAskOpenOrder(symbol:String!): [OpenAskOrder!]
+			getOpenAskOrdersForSymbol(symbol:String!): [OpenAskOrder!]
 		}
 	`,
 	resolvers: {
@@ -26,8 +26,8 @@ const OpenAskOrderModule = createModule({
 			getOpenAskOrdersForSymbolAndUser: (p, a, c) => getOpenAskOrdersForSymbolAndUser(a)
 		},
 		Subscription: {
-			newAskOpenOrder: {
-				subscribe: () => pubsub.asyncIterator(["UPDATE_ASK_ORDER"])
+			getOpenAskOrdersForSymbol: {
+				subscribe: (p, a, c) => pubsub.asyncIterator(["UPDATE_ASK_ORDER_" + a.symbol.toUpperCase()])
 			}
 		}
 	}
