@@ -11,9 +11,19 @@ const OpenAskOrderModule = createModule({
             openquantity: Float!
 		}
 
+		type UserAskOrder {
+			orderid: String!
+			quantity: Float!
+			price: Float!
+			openquantity: Float!
+			fillcost: Float!
+			createdat: String!
+			updatedat: String!
+		}
+
 		type Query {
 			getOpenAskOrdersForSymbol(symbol: String!, number: Int): [OpenAskOrder!]
-			getOpenAskOrdersForSymbolAndUser(symbol: String!, owner: ID): [OpenAskOrder!]
+			getOpenAskOrdersForSymbolAndUser(symbol: String!, owner: ID): [UserAskOrder!]
 		}
 
 		type Subscription {

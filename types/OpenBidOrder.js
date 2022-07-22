@@ -11,9 +11,19 @@ const OpenBidOrderModule = createModule({
             openquantity: Float!
 		}
 
+		type UserBidOrder {
+			orderid: String!
+			quantity: Float!
+			price: Float!
+			openquantity: Float!
+			fillcost: Float!
+			createdat: String!
+			updatedat: String!
+		}
+
 		type Query {
 			getOpenBidOrdersForSymbol(symbol: String!, number: Int): [OpenBidOrder!]
-			getOpenBidOrdersForSymbolAndUser(symbol: String!, owner: ID): [OpenBidOrder!]
+			getOpenBidOrdersForSymbolAndUser(symbol: String!, owner: ID): [UserBidOrder!]
 		}
 
 		type Subscription {
