@@ -1,6 +1,7 @@
 import { gql } from "apollo-server";
 import { createModule } from "graphql-modules";
 import { readMarketHistory, updateMarketHistory, readMarketHistoryAPI } from "../db_functions/MarketHistory.js";
+import { pubsub } from "../src/apolloServer.js";
 
 const MarketHistoryModule = createModule({
 	id: 'market-history',
@@ -23,7 +24,9 @@ const MarketHistoryModule = createModule({
 		type Mutation {
 			updateMarketHistory(symbol: String!, price: Float!, quantity: Float!): HTTPResponse
 		}
-
+		type Subscription {
+			updateMarketHistory(symbol: String!): MarketHistory!
+		}
 	`,
 	resolvers: {
 		Query: {
@@ -32,6 +35,11 @@ const MarketHistoryModule = createModule({
 		},
 		Mutation: {
 			updateMarketHistory: (p, a, c) => updateMarketHistory(a)
+		},
+		Subscription: {
+			updateMarketHistory: {
+				subscribe: (p, a, c) => pubsub.asyncIterator(["MARKET_HISTORY_" + a.symbol.toUpperCase()])
+			}
 		}
 	}
 })

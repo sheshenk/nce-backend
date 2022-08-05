@@ -43,7 +43,7 @@ const OrderFillingModule = createModule({
 				subscribe: withFilter(
 					() => pubsub.asyncIterator(['NEW_ORDER_FILLED']),
 					(payload, variables) => {
-						return payload.symbol === variables.symbol || variables.symbol === ''
+						return payload.newOrderFilled.symbol === variables.symbol || variables.symbol === ''
 					}
 				)
 			}
