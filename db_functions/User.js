@@ -29,8 +29,8 @@ export const readUser = async (single, { userid, email }) => {
 }
 
 export const updateUser = async (userid, params) => {
-	console.log(userid)
-	console.log(params)
+	// console.log(userid)
+	// console.log(params)
 	var queryString = `UPDATE users SET `
 	for (const key in params) {
 		queryString += `${key} = '${params[key]}', `

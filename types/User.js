@@ -45,7 +45,7 @@ const UserModule = createModule({
 					userid: user.userid,
 					email: user.email
 				}, "nuscrypex")
-				return { status: 201, response: token}
+				return { status: 201, response: token }
 			},
 			createUser: (p, a, c) => createUser(a),
 			updateUserDetails: (p, a, c) => updateUser(c.userid, a),
