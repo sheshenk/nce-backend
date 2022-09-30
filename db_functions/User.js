@@ -60,3 +60,15 @@ export const getUserBalance = async ({ userid }) => {
 	const res = await pool.query(queryString)
 	return res.rows.length ? res.rows[0].balance : 0
 }
+
+export const changeStage = async ({ userid, stage }) => {
+	try {
+		const res = await pool.query(
+			`UPDATE USERS SET learnstage = ${stage} WHERE userid=${userid} and learnstage < ${stage}`
+		)
+		return { status: 200, response: "MOVED STAGE" }
+	}
+	catch (err) {
+		return { status: 409, error: "FAILED STAGE MOVE" }
+	}
+}
