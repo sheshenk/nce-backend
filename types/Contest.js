@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-core";
 import { createModule } from "graphql-modules";
-import { getAllContests, getUsersByContest } from "../db_functions/Contest.js";
+import { getUsersByContest, getAllContests } from "../db_functions/Contest.js";
 
 const ContestModule = createModule({
     id: "contest",
@@ -10,6 +10,7 @@ const ContestModule = createModule({
 			name: String!
 			return: Float!
 			maxdrawdown: Float!
+            pltrend: [Float]
 		}
         type Contest {
             id: ID!
@@ -18,15 +19,22 @@ const ContestModule = createModule({
             startat: String!
             endat: String
         }
+
         type Query {
-			getParticipants(contestid: ID!): [Participant]
+			getParticipants(contestname: String!, userid: ID!): [Participant]
             getContests:[Contest]
 		}
     `,
+    // type PLResult {
+    //     id: ID!
+    //     pl: [Float]
+    // }
+    // getParticipantPL:[PLResult]
     resolvers: {
         Query: {
             getParticipants: (p, a, c) => getUsersByContest(a),
-            getContests: (p, a, c) => getAllContests()
+            getContests: (p, a, c) => getAllContests(),
+            // getParticipantPL: (p, a, c) => getPLByContestNameAndUserid(a)
         }
     }
 })
