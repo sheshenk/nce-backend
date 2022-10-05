@@ -9,7 +9,6 @@ const ContestModule = createModule({
 			userid: ID!
 			name: String!
 			return: Float!
-			sharpe_ratio: Float!
 			maxdrawdown: Float!
 		}
         type Contest {
