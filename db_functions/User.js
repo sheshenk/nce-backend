@@ -58,7 +58,7 @@ export const addBalance = async (params) => {
 export const getUserBalance = async ({ userid }) => {
 	var queryString = `SELECT * FROM USERS WHERE userid=${userid}`
 	const res = await pool.query(queryString)
-	return res.rows.length ? res.rows[0].balance : 0
+	return res.rows.length ? [res.rows[0].balance, res.rows[0].locked] : 0
 }
 
 export const changeStage = async ({ userid, stage }) => {

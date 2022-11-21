@@ -8,7 +8,6 @@ const MarketHistoryModule = createModule({
 	typeDefs: gql`
 		type MarketHistory {
 			time: String!
-			# symbol: String!
 			open: Float!
 			close: Float!
 			high: Float!

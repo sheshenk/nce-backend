@@ -1,6 +1,6 @@
 import { gql } from "apollo-server";
 import { createModule } from "graphql-modules";
-import { readWalletAsset, updateWalletAsset , getWalletAssetsWalletID} from "../db_functions/WalletAsset.js";
+import { readWalletAsset, updateWalletAsset, getWalletAssetsWalletID } from "../db_functions/WalletAsset.js";
 
 const WalletAssetModule = createModule({
 	id: 'wallet-asset',
@@ -9,6 +9,7 @@ const WalletAssetModule = createModule({
 			walletid: String!
 			symbol: String!
 			amount: Float!
+			locked:Float!
 		},
 		type Query {
 			getAllWalletAssets: [WalletAsset!]

@@ -3,7 +3,6 @@ import apolloApplication from "./apolloApplication.js";
 import jwt from "jsonwebtoken"
 import { createServer } from 'http';
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import { makeExecutableSchema } from '@graphql-tools/schema';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import express from "express";
@@ -48,8 +47,6 @@ const startApolloServer = async () => {
 		schema,
 		csrfPrevention: true,
 		context: ({ req }) => {
-			console.log(req.body.operationName)
-			console.log("REQ : ", req.body)
 			if (whitelisted.includes(req.body.operationName)) return {}
 			const token = req.headers.authorization || 'Bearer null'
 			if (!token.includes('Bearer ')) throw new AuthenticationError("Token must use Bearer format.")

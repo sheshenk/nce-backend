@@ -13,6 +13,7 @@ const UserModule = createModule({
 			password: String!
 			phone: String
 			balance: Float!
+			locked: Float!
 			learnstage: Int!
 		}
 		type Query {
@@ -20,7 +21,7 @@ const UserModule = createModule({
 			getAllUsers: [User!]
 			getUserById(userid: ID!): User
 			getUserByEmail(email: String!): User
-			getUserBalance(userid: ID!): Float
+			getUserBalance(userid: ID!): [Float]
 		},
 		type Mutation {
 			login(email: String!, password: String!): HTTPResponse
