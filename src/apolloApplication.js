@@ -10,6 +10,7 @@ import OpenAskOrderModule from "../types/OpenAskOrder.js";
 import OpenBidOrderModule from "../types/OpenBidOrder.js";
 import OrderModule from "../types/Order.js";
 import ContestModule from "../types/Contest.js";
+import NewsModule from "../types/News.js";
 
 const apolloApplication = createApplication({
 	modules: [
@@ -24,6 +25,7 @@ const apolloApplication = createApplication({
 		OpenBidOrderModule,
 		OrderModule,
 		ContestModule,
+		NewsModule,
 	]
 })
 
