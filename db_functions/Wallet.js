@@ -10,6 +10,14 @@ export const createWallet = async ({ userid }) => {
 			`INSERT INTO wallet_assets (walletid, symbol, amount) VALUES ($1, $2, $3) RETURNING *`,
 			[userid, 'btcusd', 10.0]
 		)
+		await pool.query(
+			`INSERT INTO wallet_assets (walletid, symbol, amount) VALUES ($1, $2, $3) RETURNING *`,
+			[userid, 'ethusd', 0]
+		)
+		await pool.query(
+			`INSERT INTO wallet_assets (walletid, symbol, amount) VALUES ($1, $2, $3) RETURNING *`,
+			[userid, 'xrpusd', 0]
+		)
 		return { status: 201, response: "New wallet created." }
 	} catch (err) { return { status: 409, error: err.detail } }
 }
